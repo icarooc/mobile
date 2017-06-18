@@ -1,0 +1,12 @@
+<ion-view view-title="Api REST">
+  <ion-content padding="true">
+    <h1>Itens da api</h1>
+    <button class="button button-positive" ng-click="carregar()">Carregar</button>
+    <br/>
+    <ion-list>
+  	  <ion-item ng-repeat="dragao in dragoes track by $index">
+  	    {{$index}} - {{dragao.name}}
+  	  </ion-item>
+	  </ion-list>
+  </ion-content>
+</ion-view>

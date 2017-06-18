@@ -50,7 +50,19 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'])
         controller: 'PlaylistCtrl'
       }
     }
-  });
+  })
+
+  .state('app.apirest', {
+    url: '/apirest',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/apirest.html',
+        controller: 'ApiCtrl'
+      }
+    }
+  })
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/cadastro');
-});
+})
+.constant('BASE_URL2', "https://maps.googleapis.com/maps/api/place/nearbysearch/json?radius=10000&key=AIzaSyAHE7_INX1beuYLicAWAqnw7W9dFapn9YI&type=bar&location=")
+.constant('BASE_URL', "https://dragons-api.herokuapp.com/api/dragons")

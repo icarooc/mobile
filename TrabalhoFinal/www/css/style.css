@@ -1,7 +1,7 @@
 /* Empty. Add your own CSS if you like */
 .foto-preview{
-  width: 50%;
+  width: 100px;
   margin: 0 auto;
   border: 1px solid #000;
-  min-height: 200px;
+  min-height: 100px;
 }

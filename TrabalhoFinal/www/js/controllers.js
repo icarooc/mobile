@@ -52,9 +52,26 @@ angular.module('starter.controllers', [])
   ];
 })
 
-.controller('cadastroCtrl',function($scope, $stateParams,$cordovaCamera){
+.controller('LocalizacaoCtrl', function($scope, $stateParams, $cordovaGeolocation) {
+  $scope.latLong = {};
+
+  $scope.minhaLatLong = function(){
+    $cordovaGeolocation.getCurrentPosition({timeout: 10000, enableHighAccuracy: false})
+    .then(function (position) {
+      $scope.latLong = {lat: position.coords.latitude, long: position.coords.longitude}
+    }, function(err) {
+      // error
+    });
+  }
+
+})
+
+.controller('cadastroCtrl',function($scope, $stateParams,$cordovaCamera, $cordovaGeolocation, BASE_URL, $http, $ionicLoading){
 
   $scope.fotoBase64 = "";
+  $scope.latLong = {};
+  $scope.url = "";
+  $scope.locais = [];
 
   $scope.baterFoto = function(){
 
@@ -83,6 +100,65 @@ angular.module('starter.controllers', [])
 
   }
 
+  $scope.minhaLatLong = function(){
+    $cordovaGeolocation.getCurrentPosition({timeout: 10000, enableHighAccuracy: false})
+    .then(function (position) {
+
+      var xhr = new XMLHttpRequest();
+      if (typeof XDomainRequest != "undefined") {
+        xhr = new XDomainRequest();
+      }
+
+      $scope.latLong = {lat: position.coords.latitude, long: position.coords.longitude};
+      $scope.url = BASE_URL + $scope.latLong.lat + "," + $scope.latLong.long;
+
+      console.info($scope.url);
+      console.info("chegou aqui");
+
+      /*$http.get($scope.url).then(function(resp){
+        $ionicLoading.hide();
+        $scope.locais = resp.data;
+        console.info($scope.locais);
+      }, function(err){
+        console.error(err)
+      })*/
+
+      xhr.open('GET',$scope.url, true);
+      $scope.locais = xhr.responseText;
+      console.info(xhr);
+      console.info(xhr.data);
+      console.info($scope.locais);
+      console.info("Acabou");
+
+    }, function(err) {
+      // error
+    });
+  }
+
+
+})
+
+.controller('ApiCtrl', function($scope, $stateParams, $http, BASE_URL, $ionicLoading, $ionicModal) {
+
+  $scope.dragoes = [];
+
+  $scope.carregar = function(){
+
+    $ionicLoading.show({
+      template: 'Carregando...'
+    });
+
+    console.log("antes do get... ");
+    $http.get(BASE_URL).then(function(resp){
+      console.log("passei do get... ");
+      $ionicLoading.hide();
+      $scope.dragoes = resp.data.items;
+      console.log(resp);
+      console.log(resp.data);
+    }, function(err){
+      console.error(err)
+    });
+  }
 })
 
 .controller('PlaylistCtrl', function($scope, $stateParams) {
