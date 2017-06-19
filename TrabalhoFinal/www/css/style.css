@@ -5,3 +5,22 @@
   border: 1px solid #000;
   min-height: 100px;
 }
+
+.mapa-preview{
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  border: 1px solid #000;
+}
+
+
+table {
+    max-width: 400px;
+}
+
+td {
+    width: 50%;
+    margin-top: 10px;
+    height: 200px;
+    text-align: center;
+}

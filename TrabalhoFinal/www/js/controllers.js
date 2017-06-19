@@ -41,31 +41,6 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
-})
-
-.controller('LocalizacaoCtrl', function($scope, $stateParams, $cordovaGeolocation) {
-  $scope.latLong = {};
-
-  $scope.minhaLatLong = function(){
-    $cordovaGeolocation.getCurrentPosition({timeout: 10000, enableHighAccuracy: false})
-    .then(function (position) {
-      $scope.latLong = {lat: position.coords.latitude, long: position.coords.longitude}
-    }, function(err) {
-      // error
-    });
-  }
-
-})
-
 .controller('cadastroCtrl',function($scope, $stateParams,$cordovaCamera, $cordovaGeolocation, BASE_URL, $http, $ionicLoading){
 
   $scope.fotoBase64 = "";
@@ -100,47 +75,44 @@ angular.module('starter.controllers', [])
 
   }
 
-  $scope.minhaLatLong = function(){
+  //Inserir código aqui embaixo
+  $scope.inserirLocal = function(){
+    $scope.latLong = {};
+    $scope.lat = "";
+    $scope.long = "";
+    $scope.localizacao= "";
+    $scope.jsonLoc = "";
+    $scope.locais = [];
+
+
     $cordovaGeolocation.getCurrentPosition({timeout: 10000, enableHighAccuracy: false})
     .then(function (position) {
-
-      var xhr = new XMLHttpRequest();
-      if (typeof XDomainRequest != "undefined") {
-        xhr = new XDomainRequest();
-      }
-
       $scope.latLong = {lat: position.coords.latitude, long: position.coords.longitude};
-      $scope.url = BASE_URL + $scope.latLong.lat + "," + $scope.latLong.long;
+      $scope.lat = position.coords.latitude;
+      $scope.long = position.coords.longitude;
+      $scope.localizacao = "https://maps.googleapis.com/maps/api/staticmap?center=" + $scope.lat + "," + $scope.long + "&markers=color:blue%7Clabel:A%7C" + $scope.lat + "," + $scope.long  + "&zoom=16&size=100x100&maptype=hybrid&format=jpg&key=AIzaSyAHE7_INX1beuYLicAWAqnw7W9dFapn9YI";
+      console.info($scope.localizacao);
+      $scope.jsonLoc = "http://maps.google.com/maps/api/geocode/json?latlng=" + $scope.lat + "," + $scope.long + "&sensor=true&name=%27Kent%20Street%27";
 
-      console.info($scope.url);
-      console.info("chegou aqui");
-
-      /*$http.get($scope.url).then(function(resp){
-        $ionicLoading.hide();
-        $scope.locais = resp.data;
-        console.info($scope.locais);
+      $http.get($scope.jsonLoc).then(function(resp){
+        console.log("passei do get... ");
+        $scope.locais = resp.data.results;
+        console.log(resp.data.results);
       }, function(err){
         console.error(err)
-      })*/
-
-      xhr.open('GET',$scope.url, true);
-      $scope.locais = xhr.responseText;
-      console.info(xhr);
-      console.info(xhr.data);
-      console.info($scope.locais);
-      console.info("Acabou");
+      });
 
     }, function(err) {
       // error
     });
   }
 
-
 })
 
 .controller('ApiCtrl', function($scope, $stateParams, $http, BASE_URL, $ionicLoading, $ionicModal) {
 
   $scope.dragoes = [];
+  $scope.dragon = "";
 
   $scope.carregar = function(){
 
@@ -159,6 +131,7 @@ angular.module('starter.controllers', [])
       console.error(err)
     });
   }
+
 })
 
 .controller('PlaylistCtrl', function($scope, $stateParams) {

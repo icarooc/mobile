@@ -1,21 +1,32 @@
 <ion-view view-title="Camera">
   <ion-content padding="true">
 
-    <div class="foto-preview">
-      <img ng-src="{{fotoBase64}}">
-    </div>
-
-    <button class="button button-balanced" ng-click="baterFoto()">
-      <span class="ion-camera"></span>Bater Foto
-    </button>
-
-    <button class="button button-positive" ng-click="minhaLatLong()">Localizacao</button>
-
-    {{latLong}}
-
-    <br/> 
-
-    {{url}}
-
+    <table width="100%">
+      <body>
+          <tr>
+            <td>
+              <img style="margin: 30px 30px" ng-src="{{fotoBase64}}">
+            </td>
+            <td>
+              <img style="margin: 30px 30px" src="{{localizacao}}" />
+            </td>
+          </tr>
+          <tr>
+              <td>
+                <button class="button button-balanced" ng-click="baterFoto()">
+                  <span class="ion-camera"></span> Bater Foto
+                </button>
+              </td>
+              <td>
+                <button class="button button-positive" ng-click="inserirLocal()"> Local </button>
+              </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              Local Aprx.: {{locais[0].formatted_address}}
+            </td>
+          </tr>
+      </body>
+    </table>
   </ion-content>
 </ion-view>
